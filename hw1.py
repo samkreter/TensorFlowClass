@@ -56,6 +56,8 @@ test_filename = maybe_download('notMNIST_small.tar.gz', 8458043)
 num_classes = 10
 np.random.seed(133)
 
+
+##########
 def maybe_extract(filename, force=False):
   root = os.path.splitext(os.path.splitext(filename)[0])[0]  # remove .tar.gz
   if os.path.isdir(root) and not force:
@@ -80,6 +82,8 @@ def maybe_extract(filename, force=False):
 train_folders = maybe_extract(train_filename)
 test_folders = maybe_extract(test_filename)
 
+
+#########
 image_size = 28  # Pixel width and height.
 pixel_depth = 255.0  # Number of levels per pixel.
 
@@ -135,7 +139,7 @@ def maybe_pickle(data_folders, min_num_images_per_class, force=False):
 train_datasets = maybe_pickle(train_folders, 45000)
 test_datasets = maybe_pickle(test_folders, 1800)
 
-
+##########
 def make_arrays(nb_rows, img_size):
   if nb_rows:
     dataset = np.ndarray((nb_rows, img_size, img_size), dtype=np.float32)
@@ -191,7 +195,7 @@ print('Training:', train_dataset.shape, train_labels.shape)
 print('Validation:', valid_dataset.shape, valid_labels.shape)
 print('Testing:', test_dataset.shape, test_labels.shape)
 
-
+#########
 def randomize(dataset, labels):
   permutation = np.random.permutation(labels.shape[0])
   shuffled_dataset = dataset[permutation,:,:]
@@ -201,4 +205,24 @@ def randomize(dataset, labels):
 train_dataset, train_labels = randomize(train_dataset, train_labels)
 test_dataset, test_labels = randomize(test_dataset, test_labels)
 valid_dataset, valid_labels = randomize(valid_dataset, valid_labels)
+
+
+###########
+pickle_file = 'notMNIST.pickle'
+
+try:
+  f = open(pickle_file, 'wb')
+  save = {
+    'train_dataset': train_dataset,
+    'train_labels': train_labels,
+    'valid_dataset': valid_dataset,
+    'valid_labels': valid_labels,
+    'test_dataset': test_dataset,
+    'test_labels': test_labels,
+    }
+  pickle.dump(save, f, pickle.HIGHEST_PROTOCOL)
+  f.close()
+except Exception as e:
+  print('Unable to save data to', pickle_file, ':', e)
+  raise
 
