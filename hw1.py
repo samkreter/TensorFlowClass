@@ -183,9 +183,9 @@ def merge_datasets(pickle_files, train_size, valid_size=0):
   return valid_dataset, valid_labels, train_dataset, train_labels
 
 
-train_size = 200
-valid_size = 10
-test_size = 10
+train_size = 10000
+valid_size = 1000
+test_size = 1000
 
 valid_dataset, valid_labels, train_dataset, train_labels = merge_datasets(
   train_datasets, train_size, valid_size)
@@ -207,6 +207,7 @@ test_dataset, test_labels = randomize(test_dataset, test_labels)
 valid_dataset, valid_labels = randomize(valid_dataset, valid_labels)
 
 
+
 nsamples, nx, ny = train_dataset.shape
 d2_train_dataset = train_dataset.reshape((nsamples,nx*ny))
 
@@ -218,7 +219,7 @@ print(nsamples)
 legy = LogisticRegression()
 legy.fit(d2_train_dataset,train_labels)
 print("finished fitting")
-pLabels = legy.predict(d2_test_dataset)
+#pLabels = legy.predict(d2_test_dataset)
 
 print(legy.score(d2_test_dataset,test_labels))
 exit()
